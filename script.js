@@ -75,6 +75,7 @@ const inputDistance = document.querySelector('.form__input--distance');
 const inputDuration = document.querySelector('.form__input--duration');
 const inputCadence = document.querySelector('.form__input--cadence');
 const inputElevation = document.querySelector('.form__input--elevation');
+const deleteAllBtn = document.querySelector('.delete-btn');
 
 class App {
   #map;
@@ -93,6 +94,7 @@ class App {
     form.addEventListener('submit', this._newWorkout.bind(this));
     inputType.addEventListener('change', this._toggleElevationField);
     containerWorkouts.addEventListener('click', this._moveToPopup.bind(this));
+    deleteAllBtn.addEventListener('click', this._deleteAllItem.bind(this));
   }
 
   _getPosition() {
@@ -275,6 +277,20 @@ class App {
       `;
 
     form.insertAdjacentHTML('afterend', html);
+
+    deleteAllBtn.classList.remove('hidden');
+  }
+  _deleteAllItem(e) {
+    // deleting all workout from storage
+    const deleteBtnEl = e.target.closest('.delete-btn');
+    if (!deleteBtnEl) return;
+    containerWorkouts.style.display = 'none';
+    // while (this.#workouts.length) {
+    //   this.#workouts.pop();
+    // }
+    this.#workouts.forEach(el => el.pop());
+    this._setLocalStorage();
+    location.reload();
   }
 
   _moveToPopup(e) {
@@ -298,6 +314,8 @@ class App {
 
     // using the public interface
     // workout.click();
+    // dleting workouts
+    this._deleteAllItem();
   }
 
   _setLocalStorage() {
